@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Alert, Table, Modal } from "../components/organisms";
+import { Alert, Table } from "../components/organisms";
+import Modal from "@/components/Modal";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
 import type { User } from "../services/userService";
@@ -509,59 +510,37 @@ export const ManagementPage: React.FC = () => {
       </div>
 
       <Modal
-        isOpen={isCreateModalOpen}
+        isOpen={isCreateModalOpen || isEditModalOpen}
         onClose={handleReset}
-        title={`새 ${entityType === "user" ? "사용자" : "게시글"} 만들기`}
-        size="large"
-        showFooter
-        footerContent={
-          <>
-            <Button variant="secondary" size="md" onClick={handleReset}>
-              취소
-            </Button>
-            <Button size="md" onClick={onSubmit}>
-              생성
-            </Button>
-          </>
-        }>
-        <div>
-          {entityType === "user" ? (
-            <UserForm form={form} handleClick={handleCreate} />
-          ) : (
-            <ArticleForm formArticle={formArticle} handleClick={handleCreate} />
-          )}
-        </div>
-      </Modal>
-
-      <Modal
-        isOpen={isEditModalOpen}
-        onClose={handleReset}
-        title={`${entityType === "user" ? "사용자" : "게시글"} 수정`}
-        size="large"
-        showFooter
-        footerContent={
-          <>
-            <Button variant="secondary" size="md" onClick={handleReset}>
-              취소
-            </Button>
-            <Button size="md" onClick={handleUpdate}>
-              수정 완료
-            </Button>
-          </>
-        }>
+        title={
+          selectedItem
+            ? `${entityType === "user" ? "사용자" : "게시글"} 수정`
+            : `새 ${entityType === "user" ? "사용자" : "게시글"} 만들기`
+        }
+        onConfirm={selectedItem ? handleUpdate : onSubmit}
+        confirmText={selectedItem ? "수정 완료" : "생성"}
+        cancelText="취소">
         <div>
           {selectedItem && (
-            <Alert variant="info">
-              ID: {selectedItem.id} | 생성일: {selectedItem.createdAt}
-              {entityType === "post" &&
-                ` | 조회수: ${(selectedItem as Post).views}`}
-            </Alert>
+            <div className="mb-4">
+              <Alert variant="info">
+                ID: {selectedItem.id} | 생성일: {selectedItem.createdAt}
+                {entityType === "post" &&
+                  ` | 조회수: ${(selectedItem as Post).views}`}
+              </Alert>
+            </div>
           )}
 
           {entityType === "user" ? (
-            <UserForm form={form} handleClick={handleUpdate} />
+            <UserForm
+              form={form}
+              handleClick={selectedItem ? handleUpdate : handleCreate}
+            />
           ) : (
-            <ArticleForm formArticle={formArticle} handleClick={handleUpdate} />
+            <ArticleForm
+              formArticle={formArticle}
+              handleClick={selectedItem ? handleUpdate : handleCreate}
+            />
           )}
         </div>
       </Modal>
