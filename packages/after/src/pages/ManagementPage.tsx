@@ -19,6 +19,7 @@ import {
 } from "@/schemas/articleSchema";
 import StatusCard, { type StatusCardItem } from "@/components/StatusCards";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { POST_STAT_CONFIG } from "@/components/constants";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -79,58 +80,58 @@ const buildUserStats = (users: User[]): StatusMetric[] => {
   ];
 };
 
-const buildPostStats = (posts: Post[]): StatusMetric[] => {
-  const summary = posts.reduce(
-    (acc, post) => {
-      acc.total += 1;
-      acc.status[post.status] += 1;
-      acc.views += post.views;
-      return acc;
-    },
-    {
-      total: 0,
-      status: {
-        draft: 0,
-        published: 0,
-        archived: 0,
-      } as Record<Post["status"], number>,
-      views: 0,
-    }
-  );
+// const buildPostStats = (posts: Post[]): StatusMetric[] => {
+//   const summary = posts.reduce(
+//     (acc, post) => {
+//       acc.total += 1;
+//       acc.status[post.status] += 1;
+//       acc.views += post.views;
+//       return acc;
+//     },
+//     {
+//       total: 0,
+//       status: {
+//         draft: 0,
+//         published: 0,
+//         archived: 0,
+//       } as Record<Post["status"], number>,
+//       views: 0,
+//     }
+//   );
 
-  return [
-    {
-      key: "total",
-      label: "전체",
-      value: summary.total,
-      accentColorVar: "--primary",
-    },
-    {
-      key: "published",
-      label: "게시됨",
-      value: summary.status.published,
-      accentColorVar: "--stat-post-published",
-    },
-    {
-      key: "draft",
-      label: "임시저장",
-      value: summary.status.draft,
-      accentColorVar: "--stat-post-draft",
-    },
-    {
-      key: "archived",
-      label: "보관됨",
-      value: summary.status.archived,
-      accentColorVar: "--stat-post-archived",
-    },
-    {
-      key: "views",
-      label: "총 조회수",
-      value: summary.views,
-      accentColorVar: "--stat-post-views",
-    },
-  ];
-};
+//   return [
+//     {
+//       key: "total",
+//       label: "전체",
+//       value: summary.total,
+//       accentColorVar: "--primary",
+//     },
+//     {
+//       key: "published",
+//       label: "게시됨",
+//       value: summary.status.published,
+//       accentColorVar: "--stat-post-published",
+//     },
+//     {
+//       key: "draft",
+//       label: "임시저장",
+//       value: summary.status.draft,
+//       accentColorVar: "--stat-post-draft",
+//     },
+//     {
+//       key: "archived",
+//       label: "보관됨",
+//       value: summary.status.archived,
+//       accentColorVar: "--stat-post-archived",
+//     },
+//     {
+//       key: "views",
+//       label: "총 조회수",
+//       value: summary.views,
+//       accentColorVar: "--stat-post-views",
+//     },
+//   ];
+// };
 
 export const ManagementPage: React.FC = () => {
   const [entityType, setEntityType] = useState<EntityType>("post");
@@ -310,7 +311,7 @@ export const ManagementPage: React.FC = () => {
     if (entityType === "user") {
       return buildUserStats(data as User[]);
     }
-    return buildPostStats(data as Post[]);
+    return POST_STAT_CONFIG(data as Post[]);
   };
 
   const renderTableColumns = () => {
