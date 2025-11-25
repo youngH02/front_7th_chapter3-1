@@ -16,17 +16,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { SubmitHandler, UseFormReturn } from "react-hook-form";
-
-interface UserFormValues {
-  username: string;
-  email: string;
-  role: string;
-  status: string;
-}
+import type { TUserFormValues } from "@/schemas/userSchema";
 
 interface IProps {
-  form: UseFormReturn<UserFormValues>;
-  handleClick: SubmitHandler<UserFormValues>;
+  form: UseFormReturn<TUserFormValues>;
+  handleClick: SubmitHandler<TUserFormValues>;
 }
 
 const UserForm: FC<IProps> = ({ form, handleClick }) => {
@@ -61,12 +55,7 @@ const UserForm: FC<IProps> = ({ form, handleClick }) => {
           )}
         />
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "16px",
-          }}>
+        <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="role"

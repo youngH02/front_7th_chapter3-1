@@ -7,24 +7,18 @@ import type { Post } from "../services/postService";
 import "../styles/components.css";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import UserForm from "@/components/userForm/UserForm";
-import ArticleForm from "@/components/articleForm/ArticleForm";
+import UserForm from "@/components/UserForm";
+import ArticleForm from "@/components/ArticleForm";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { userSchema, type TUserFormValues } from "@/schemas/userSchema";
+import {
+  articleSchema,
+  type TArticleFormValues,
+} from "@/schemas/articleSchema";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
-type FormValue = {
-  username: string;
-  email: string;
-  role: string;
-  status: string;
-};
-
-type TFormArticle = {
-  title: string;
-  content?: string;
-  author?: string;
-  category?: string;
-};
 
 export const ManagementPage: React.FC = () => {
   const [entityType, setEntityType] = useState<EntityType>("post");
@@ -37,13 +31,15 @@ export const ManagementPage: React.FC = () => {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const [formData, setFormData] = useState<any>({});
-  const form = useForm<FormValue>({
+  const form = useForm<TUserFormValues>({
+    resolver: zodResolver(userSchema),
     defaultValues: { role: "user", status: "active" },
   });
-  const formArticle = useForm<TFormArticle>({
-    defaultValues: { title: "" },
+  const formArticle = useForm<TArticleFormValues>({
+    resolver: zodResolver(articleSchema),
+    defaultValues: { title: "", category: "development" },
   });
+
   useEffect(() => {
     loadData();
     setIsCreateModalOpen(false);
@@ -89,7 +85,15 @@ export const ManagementPage: React.FC = () => {
     }
   };
 
-  const handleCreate = async (values: FormValue | TFormArticle) => {
+  const handleReset = () => {
+    //초기화 버튼
+    setIsCreateModalOpen(false);
+    setIsEditModalOpen(false);
+    form.reset();
+    formArticle.reset();
+  };
+
+  const handleCreate = async (values: TUserFormValues | TArticleFormValues) => {
     try {
       if (entityType === "user") {
         await userService.create(values as User);
@@ -99,7 +103,6 @@ export const ManagementPage: React.FC = () => {
 
       await loadData();
       setIsCreateModalOpen(false);
-      // setFormData({});
       setAlertMessage(
         `${entityType === "user" ? "사용자" : "게시글"}가 생성되었습니다`
       );
@@ -135,6 +138,14 @@ export const ManagementPage: React.FC = () => {
     } catch (error: any) {
       setErrorMessage(error.message || "수정에 실패했습니다");
       setShowErrorAlert(true);
+    }
+  };
+
+  const onSubmit = () => {
+    if (entityType === "user") {
+      return form.handleSubmit(handleCreate);
+    } else {
+      return formArticle.handleSubmit(handleCreate);
     }
   };
 
@@ -312,14 +323,12 @@ export const ManagementPage: React.FC = () => {
           </div>
 
           <div>
-            {/* <div style={{ marginBottom: "15px", textAlign: "right" }}> */}
             <Button
               className="mb-4 text-right"
               size="lg"
               onClick={() => setIsCreateModalOpen(true)}>
               새로 만들기
             </Button>
-            {/* </div> */}
 
             {showSuccessAlert && (
               <div style={{ marginBottom: "10px" }}>
@@ -501,39 +510,16 @@ export const ManagementPage: React.FC = () => {
 
       <Modal
         isOpen={isCreateModalOpen}
-        onClose={() => {
-          setIsCreateModalOpen(false);
-          if (entityType === "user") {
-            form.reset(); // user form 초기화
-          } else {
-            formArticle.reset(); // post form 초기화
-          }
-        }}
+        onClose={handleReset}
         title={`새 ${entityType === "user" ? "사용자" : "게시글"} 만들기`}
         size="large"
         showFooter
         footerContent={
           <>
-            <Button
-              variant="secondary"
-              size="md"
-              onClick={() => {
-                setIsCreateModalOpen(false);
-                if (entityType === "user") {
-                  form.reset(); // user form 초기화
-                } else {
-                  formArticle.reset(); // post form 초기화
-                }
-              }}>
+            <Button variant="secondary" size="md" onClick={handleReset}>
               취소
             </Button>
-            <Button
-              size="md"
-              onClick={
-                entityType === "user"
-                  ? form.handleSubmit(handleCreate)
-                  : formArticle.handleSubmit(handleCreate)
-              }>
+            <Button size="md" onClick={onSubmit}>
               생성
             </Button>
           </>
@@ -549,32 +535,13 @@ export const ManagementPage: React.FC = () => {
 
       <Modal
         isOpen={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false);
-          if (entityType === "user") {
-            form.reset(); // user form 초기화
-          } else {
-            formArticle.reset(); // post form 초기화
-          }
-          setSelectedItem(null);
-        }}
+        onClose={handleReset}
         title={`${entityType === "user" ? "사용자" : "게시글"} 수정`}
         size="large"
         showFooter
         footerContent={
           <>
-            <Button
-              variant="secondary"
-              size="md"
-              onClick={() => {
-                setIsEditModalOpen(false);
-                if (entityType === "user") {
-                  form.reset(); // user form 초기화
-                } else {
-                  formArticle.reset(); // post form 초기화
-                }
-                setSelectedItem(null);
-              }}>
+            <Button variant="secondary" size="md" onClick={handleReset}>
               취소
             </Button>
             <Button size="md" onClick={handleUpdate}>

@@ -4,16 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { SubmitHandler, UseFormReturn } from "react-hook-form";
-interface ArticleFormValues {
-   title: string;
-  content?: string;
-  author?: string;
-  category?: string;
-}
+import type { TArticleFormValues } from "@/schemas/articleSchema";
 
 interface IProps {
-  formArticle: UseFormReturn<ArticleFormValues>;
-  handleClick: SubmitHandler<ArticleFormValues>;
+  formArticle: UseFormReturn<TArticleFormValues>;
+  handleClick: SubmitHandler<TArticleFormValues>;
 }
 
 const ArticleForm: FC<IProps> = ({ formArticle, handleClick }) => {
@@ -29,15 +24,11 @@ const ArticleForm: FC<IProps> = ({ formArticle, handleClick }) => {
               <FormControl>
                 <Input placeholder="게시글 제목을 입력하세요" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "16px",
-          }}>
+        <div className="grid grid-cols-2 gap-4">
           <FormField
             control={formArticle.control}
             name="author"
@@ -47,6 +38,7 @@ const ArticleForm: FC<IProps> = ({ formArticle, handleClick }) => {
                 <FormControl>
                   <Input placeholder="작성자명" {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -71,6 +63,7 @@ const ArticleForm: FC<IProps> = ({ formArticle, handleClick }) => {
                     </SelectContent>
                   </Select>
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
