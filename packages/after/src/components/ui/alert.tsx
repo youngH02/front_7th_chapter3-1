@@ -1,4 +1,5 @@
 import * as React from "react"
+import { X } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
@@ -11,6 +12,7 @@ const alertVariants = cva(
         default: "bg-background text-foreground",
         destructive:
           "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+        info: "border-primary/40 text-primary [&>svg]:text-primary",
       },
     },
     defaultVariants: {
@@ -19,17 +21,38 @@ const alertVariants = cva(
   }
 )
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={cn(alertVariants({ variant }), className)}
-    {...props}
-  />
-))
+interface AlertProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof alertVariants> {
+  onClose?: () => void
+}
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
+  ({ className, variant, onClose, children, ...props }, ref) => (
+    <div
+      ref={ref}
+      role="alert"
+      className={cn(
+        alertVariants({ variant }),
+        onClose && "pr-10",
+        className
+      )}
+      {...props}
+    >
+      {children}
+      {onClose && (
+        <button
+          type="button"
+          aria-label="닫기"
+          className="absolute right-2 top-2 rounded-sm text-muted-foreground opacity-70 transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          onClick={onClose}
+        >
+          <X className="h-4 w-4" />
+        </button>
+      )}
+    </div>
+  )
+)
 Alert.displayName = "Alert"
 
 const AlertTitle = React.forwardRef<

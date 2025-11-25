@@ -29,6 +29,15 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+
+    --stat-user-active: 142 43% 35%;
+    --stat-user-inactive: 32 85% 52%;
+    --stat-user-suspended: 0 60% 52%;
+    --stat-user-admin: 210 90% 40%;
+    --stat-post-published: 142 43% 35%;
+    --stat-post-draft: 32 85% 52%;
+    --stat-post-archived: 210 5% 30%;
+    --stat-post-views: 210 90% 40%;
   }
 
   .dark {
@@ -56,6 +65,15 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    
+    --stat-user-active: 142 43% 55%;
+    --stat-user-inactive: 32 85% 60%;
+    --stat-user-suspended: 0 60% 65%;
+    --stat-user-admin: 210 90% 70%;
+    --stat-post-published: 142 43% 55%;
+    --stat-post-draft: 32 85% 60%;
+    --stat-post-archived: 0 0% 70%;
+    --stat-post-views: 210 90% 70%;
   }
 }
 

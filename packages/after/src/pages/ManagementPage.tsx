@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert, Table } from "../components/organisms";
+import { Table } from "../components/organisms";
 import Modal from "@/components/Modal";
 import { userService } from "../services/userService";
 import { postService } from "../services/postService";
@@ -17,9 +17,120 @@ import {
   articleSchema,
   type TArticleFormValues,
 } from "@/schemas/articleSchema";
+import StatusCard, { type StatusCardItem } from "@/components/StatusCards";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
+type StatusMetric = StatusCardItem;
+
+const buildUserStats = (users: User[]): StatusMetric[] => {
+  const summary = users.reduce(
+    (acc, user) => {
+      acc.total += 1;
+      acc.status[user.status] += 1;
+      if (user.role === "admin") {
+        acc.admin += 1;
+      }
+      return acc;
+    },
+    {
+      total: 0,
+      status: {
+        active: 0,
+        inactive: 0,
+        suspended: 0,
+      } as Record<User["status"], number>,
+      admin: 0,
+    }
+  );
+
+  return [
+    {
+      key: "total",
+      label: "전체",
+      value: summary.total,
+      accentColorVar: "--primary",
+    },
+    {
+      key: "active",
+      label: "활성",
+      value: summary.status.active,
+      accentColorVar: "--stat-user-active",
+    },
+    {
+      key: "inactive",
+      label: "비활성",
+      value: summary.status.inactive,
+      accentColorVar: "--stat-user-inactive",
+    },
+    {
+      key: "suspended",
+      label: "정지",
+      value: summary.status.suspended,
+      accentColorVar: "--stat-user-suspended",
+    },
+    {
+      key: "admin",
+      label: "관리자",
+      value: summary.admin,
+      accentColorVar: "--stat-user-admin",
+    },
+  ];
+};
+
+const buildPostStats = (posts: Post[]): StatusMetric[] => {
+  const summary = posts.reduce(
+    (acc, post) => {
+      acc.total += 1;
+      acc.status[post.status] += 1;
+      acc.views += post.views;
+      return acc;
+    },
+    {
+      total: 0,
+      status: {
+        draft: 0,
+        published: 0,
+        archived: 0,
+      } as Record<Post["status"], number>,
+      views: 0,
+    }
+  );
+
+  return [
+    {
+      key: "total",
+      label: "전체",
+      value: summary.total,
+      accentColorVar: "--primary",
+    },
+    {
+      key: "published",
+      label: "게시됨",
+      value: summary.status.published,
+      accentColorVar: "--stat-post-published",
+    },
+    {
+      key: "draft",
+      label: "임시저장",
+      value: summary.status.draft,
+      accentColorVar: "--stat-post-draft",
+    },
+    {
+      key: "archived",
+      label: "보관됨",
+      value: summary.status.archived,
+      accentColorVar: "--stat-post-archived",
+    },
+    {
+      key: "views",
+      label: "총 조회수",
+      value: summary.views,
+      accentColorVar: "--stat-post-views",
+    },
+  ];
+};
 
 export const ManagementPage: React.FC = () => {
   const [entityType, setEntityType] = useState<EntityType>("post");
@@ -195,61 +306,13 @@ export const ManagementPage: React.FC = () => {
     }
   };
 
-  const getStats = () => {
+  const getStats = (): StatusMetric[] => {
     if (entityType === "user") {
-      const users = data as User[];
-      return {
-        total: users.length,
-        stat1: {
-          label: "활성",
-          value: users.filter((u) => u.status === "active").length,
-          color: "#2e7d32",
-        },
-        stat2: {
-          label: "비활성",
-          value: users.filter((u) => u.status === "inactive").length,
-          color: "#ed6c02",
-        },
-        stat3: {
-          label: "정지",
-          value: users.filter((u) => u.status === "suspended").length,
-          color: "#d32f2f",
-        },
-        stat4: {
-          label: "관리자",
-          value: users.filter((u) => u.role === "admin").length,
-          color: "#1976d2",
-        },
-      };
-    } else {
-      const posts = data as Post[];
-      return {
-        total: posts.length,
-        stat1: {
-          label: "게시됨",
-          value: posts.filter((p) => p.status === "published").length,
-          color: "#2e7d32",
-        },
-        stat2: {
-          label: "임시저장",
-          value: posts.filter((p) => p.status === "draft").length,
-          color: "#ed6c02",
-        },
-        stat3: {
-          label: "보관됨",
-          value: posts.filter((p) => p.status === "archived").length,
-          color: "rgba(0, 0, 0, 0.6)",
-        },
-        stat4: {
-          label: "총 조회수",
-          value: posts.reduce((sum, p) => sum + p.views, 0),
-          color: "#1976d2",
-        },
-      };
+      return buildUserStats(data as User[]);
     }
+    return buildPostStats(data as Post[]);
   };
 
-  // 🚨 Table 컴포넌트에 로직을 위임하여 간소화
   const renderTableColumns = () => {
     if (entityType === "user") {
       return [
@@ -332,159 +395,26 @@ export const ManagementPage: React.FC = () => {
             </Button>
 
             {showSuccessAlert && (
-              <div style={{ marginBottom: "10px" }}>
-                <Alert
-                  variant="success"
-                  title="성공"
-                  onClose={() => setShowSuccessAlert(false)}>
-                  {alertMessage}
+              <div className="mb-3">
+                <Alert onClose={() => setShowSuccessAlert(false)}>
+                  <AlertTitle>성공</AlertTitle>
+                  <AlertDescription>{alertMessage}</AlertDescription>
                 </Alert>
               </div>
             )}
 
             {showErrorAlert && (
-              <div style={{ marginBottom: "10px" }}>
+              <div className="mb-3">
                 <Alert
-                  variant="error"
-                  title="오류"
-                  onClose={() => setShowErrorAlert(false)}>
-                  {errorMessage}
+                  onClose={() => setShowErrorAlert(false)}
+                  variant="destructive">
+                  <AlertTitle>오류</AlertTitle>
+                  <AlertDescription>{errorMessage}</AlertDescription>
                 </Alert>
               </div>
             )}
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
-                gap: "10px",
-                marginBottom: "15px",
-              }}>
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#e3f2fd",
-                  border: "1px solid #90caf9",
-                  borderRadius: "3px",
-                }}>
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}>
-                  전체
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#1976d2",
-                  }}>
-                  {stats.total}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#e8f5e9",
-                  border: "1px solid #81c784",
-                  borderRadius: "3px",
-                }}>
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}>
-                  {stats.stat1.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#388e3c",
-                  }}>
-                  {stats.stat1.value}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#fff3e0",
-                  border: "1px solid #ffb74d",
-                  borderRadius: "3px",
-                }}>
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}>
-                  {stats.stat2.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#f57c00",
-                  }}>
-                  {stats.stat2.value}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#ffebee",
-                  border: "1px solid #e57373",
-                  borderRadius: "3px",
-                }}>
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}>
-                  {stats.stat3.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#d32f2f",
-                  }}>
-                  {stats.stat3.value}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: "12px 15px",
-                  background: "#f5f5f5",
-                  border: "1px solid #bdbdbd",
-                  borderRadius: "3px",
-                }}>
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#666",
-                    marginBottom: "4px",
-                  }}>
-                  {stats.stat4.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "24px",
-                    fontWeight: "bold",
-                    color: "#424242",
-                  }}>
-                  {stats.stat4.value}
-                </div>
-              </div>
-            </div>
+            <StatusCard items={stats} />
 
             <div
               style={{

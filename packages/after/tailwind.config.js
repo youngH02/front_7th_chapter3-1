@@ -7,7 +7,6 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
       screens: {
         "2xl": "1400px",
       },
@@ -53,6 +52,20 @@ export default {
           3: "hsl(var(--chart-3))",
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
+        },
+        stat: {
+          user: {
+            active: "hsl(var(--stat-user-active))",
+            inactive: "hsl(var(--stat-user-inactive))",
+            suspended: "hsl(var(--stat-user-suspended))",
+            admin: "hsl(var(--stat-user-admin))",
+          },
+          post: {
+            published: "hsl(var(--stat-post-published))",
+            draft: "hsl(var(--stat-post-draft))",
+            archived: "hsl(var(--stat-post-archived))",
+            views: "hsl(var(--stat-post-views))",
+          },
         },
       },
       borderRadius: {
