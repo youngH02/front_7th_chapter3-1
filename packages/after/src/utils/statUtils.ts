@@ -1,11 +1,6 @@
-import {
-  POST_STAT_META,
-  USER_STAT_META,
-  type PostStatKey,
-  type StatusCardItem,
-  type UserStatKey,
-} from "@/constants/stats";
+import { POST_STAT_META, USER_STAT_META } from "@/constants/stats";
 import type { Post } from "@/services/postService";
+import type { PostStatKey, StatusCardItem, UserStatKey } from "@/types/stats";
 
 import type { User } from "@/services/userService";
 

@@ -14,15 +14,15 @@ import {
   articleSchema,
   type TArticleFormValues,
 } from "@/schemas/articleSchema";
-import StatusCard from "@/components/StatusCards";
-import type { StatusCardItem } from "@/constants/stats";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { POST_STAT_CONFIG, USER_STAT_CONFIG } from "@/utils/statUtils";
 import Modal from "@/components/common/Modal";
+import type { StatusCardItem } from "@/types/stats";
+import { POST_STAT_CONFIG, USER_STAT_CONFIG } from "@/utils/statUtils";
+import StatusCard from "@/components/common/StatusCards";
+import DataTable from "@/components/common/DataTable";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
-type StatusMetric = StatusCardItem;
 
 export const ManagementPage: React.FC = () => {
   const [entityType, setEntityType] = useState<EntityType>("post");
@@ -212,7 +212,7 @@ export const ManagementPage: React.FC = () => {
     }
   };
 
-  const getStats = (): StatusMetric[] => {
+  const getStats = (): StatusCardItem[] => {
     if (entityType === "user") {
       return USER_STAT_CONFIG(data as User[]);
     }
@@ -310,7 +310,7 @@ export const ManagementPage: React.FC = () => {
             <StatusCard items={stats} />
 
             <div className="bg-white border border-gray-200 p-2.5 overflow-auto">
-              <Table
+              {/* <Table
                 columns={renderTableColumns()}
                 data={data}
                 striped
@@ -322,6 +322,9 @@ export const ManagementPage: React.FC = () => {
                 onArchive={(id) => handleStatusAction(id, "archive")}
                 onRestore={(id) => handleStatusAction(id, "restore")}
               />
+            </div>
+            <div> */}
+              <DataTable columns={renderTableColumns()} data={data || []} />
             </div>
           </div>
         </div>

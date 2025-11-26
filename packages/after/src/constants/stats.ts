@@ -1,16 +1,4 @@
-export interface StatusCardItem {
-  key: string;
-  label: string;
-  value: number;
-  accentColorVar?: string;
-}
-
-export type PostStatKey =
-  | "total"
-  | "published"
-  | "draft"
-  | "archived"
-  | "views";
+import type { PostStatKey, UserStatKey } from "@/types/stats";
 
 export const POST_STAT_META: Record<
   PostStatKey,
@@ -22,13 +10,6 @@ export const POST_STAT_META: Record<
   archived: { label: "보관됨", accent: "--stat-post-archived" },
   views: { label: "총 조회수", accent: "--stat-post-views" },
 };
-
-export type UserStatKey =
-  | "total"
-  | "active"
-  | "inactive"
-  | "suspended"
-  | "admin";
 
 export const USER_STAT_META: Record<
   UserStatKey,
