@@ -1,12 +1,6 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { type FC, type CSSProperties } from "react";
-
-export interface StatusCardItem {
-  key: string;
-  label: string;
-  value: number;
-  accentColorVar?: string;
-}
+import type { StatusCardItem } from "@/constants/stats";
 
 interface IProps {
   items: StatusCardItem[];

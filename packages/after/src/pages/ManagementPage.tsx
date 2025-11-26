@@ -17,121 +17,14 @@ import {
   articleSchema,
   type TArticleFormValues,
 } from "@/schemas/articleSchema";
-import StatusCard, { type StatusCardItem } from "@/components/StatusCards";
+import StatusCard from "@/components/StatusCards";
+import type { StatusCardItem } from "@/constants/stats";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { POST_STAT_CONFIG } from "@/components/constants";
+import { POST_STAT_CONFIG, USER_STAT_CONFIG } from "@/utils/statUtils";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
 type StatusMetric = StatusCardItem;
-
-const buildUserStats = (users: User[]): StatusMetric[] => {
-  const summary = users.reduce(
-    (acc, user) => {
-      acc.total += 1;
-      acc.status[user.status] += 1;
-      if (user.role === "admin") {
-        acc.admin += 1;
-      }
-      return acc;
-    },
-    {
-      total: 0,
-      status: {
-        active: 0,
-        inactive: 0,
-        suspended: 0,
-      } as Record<User["status"], number>,
-      admin: 0,
-    }
-  );
-
-  return [
-    {
-      key: "total",
-      label: "전체",
-      value: summary.total,
-      accentColorVar: "--primary",
-    },
-    {
-      key: "active",
-      label: "활성",
-      value: summary.status.active,
-      accentColorVar: "--stat-user-active",
-    },
-    {
-      key: "inactive",
-      label: "비활성",
-      value: summary.status.inactive,
-      accentColorVar: "--stat-user-inactive",
-    },
-    {
-      key: "suspended",
-      label: "정지",
-      value: summary.status.suspended,
-      accentColorVar: "--stat-user-suspended",
-    },
-    {
-      key: "admin",
-      label: "관리자",
-      value: summary.admin,
-      accentColorVar: "--stat-user-admin",
-    },
-  ];
-};
-
-// const buildPostStats = (posts: Post[]): StatusMetric[] => {
-//   const summary = posts.reduce(
-//     (acc, post) => {
-//       acc.total += 1;
-//       acc.status[post.status] += 1;
-//       acc.views += post.views;
-//       return acc;
-//     },
-//     {
-//       total: 0,
-//       status: {
-//         draft: 0,
-//         published: 0,
-//         archived: 0,
-//       } as Record<Post["status"], number>,
-//       views: 0,
-//     }
-//   );
-
-//   return [
-//     {
-//       key: "total",
-//       label: "전체",
-//       value: summary.total,
-//       accentColorVar: "--primary",
-//     },
-//     {
-//       key: "published",
-//       label: "게시됨",
-//       value: summary.status.published,
-//       accentColorVar: "--stat-post-published",
-//     },
-//     {
-//       key: "draft",
-//       label: "임시저장",
-//       value: summary.status.draft,
-//       accentColorVar: "--stat-post-draft",
-//     },
-//     {
-//       key: "archived",
-//       label: "보관됨",
-//       value: summary.status.archived,
-//       accentColorVar: "--stat-post-archived",
-//     },
-//     {
-//       key: "views",
-//       label: "총 조회수",
-//       value: summary.views,
-//       accentColorVar: "--stat-post-views",
-//     },
-//   ];
-// };
 
 export const ManagementPage: React.FC = () => {
   const [entityType, setEntityType] = useState<EntityType>("post");
@@ -139,10 +32,14 @@ export const ManagementPage: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Entity | null>(null);
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  // const [alertMessage, setAlertMessage] = useState("");
+  // const [showErrorAlert, setShowErrorAlert] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState("");
+  const [pageAlert, setPageAlert] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
 
   const form = useForm<TUserFormValues>({
     resolver: zodResolver(userSchema),
@@ -193,8 +90,10 @@ export const ManagementPage: React.FC = () => {
 
       setData(result);
     } catch (error: any) {
-      setErrorMessage("데이터를 불러오는데 실패했습니다");
-      setShowErrorAlert(true);
+      setPageAlert({
+        type: "error",
+        message: "데이터를 불러오는데 실패했습니다",
+      });
     }
   };
 
@@ -216,13 +115,15 @@ export const ManagementPage: React.FC = () => {
 
       await loadData();
       setIsCreateModalOpen(false);
-      setAlertMessage(
-        `${entityType === "user" ? "사용자" : "게시글"}가 생성되었습니다`
-      );
-      setShowSuccessAlert(true);
+      setPageAlert({
+        type: "success",
+        message: `${entityType === "user" ? "사용자" : "게시글"}가 생성되었습니다`,
+      });
     } catch (error: any) {
-      setErrorMessage(error.message || "생성에 실패했습니다");
-      setShowErrorAlert(true);
+      setPageAlert({
+        type: "error",
+        message: `${error.message || "생성에 실패했습니다"}`,
+      });
     }
   };
 
@@ -244,13 +145,15 @@ export const ManagementPage: React.FC = () => {
       await loadData();
       setIsEditModalOpen(false);
       setSelectedItem(null);
-      setAlertMessage(
-        `${entityType === "user" ? "사용자" : "게시글"}가 수정되었습니다`
-      );
-      setShowSuccessAlert(true);
+      setPageAlert({
+        type: "success",
+        message: `${entityType === "user" ? "사용자" : "게시글"}가 수정되었습니다`,
+      });
     } catch (error: any) {
-      setErrorMessage(error.message || "수정에 실패했습니다");
-      setShowErrorAlert(true);
+      setPageAlert({
+        type: "error",
+        message: `${error.message || "수정에 실패했습니다"}`,
+      });
     }
   };
 
@@ -273,11 +176,15 @@ export const ManagementPage: React.FC = () => {
       }
 
       await loadData();
-      setAlertMessage("삭제되었습니다");
-      setShowSuccessAlert(true);
+      setPageAlert({
+        type: "success",
+        message: "삭제되었습니다",
+      });
     } catch (error: any) {
-      setErrorMessage(error.message || "삭제에 실패했습니다");
-      setShowErrorAlert(true);
+      setPageAlert({
+        type: "error",
+        message: `${error.message || "삭제에 실패했습니다"}`,
+      });
     }
   };
 
@@ -299,17 +206,21 @@ export const ManagementPage: React.FC = () => {
       await loadData();
       const message =
         action === "publish" ? "게시" : action === "archive" ? "보관" : "복원";
-      setAlertMessage(`${message}되었습니다`);
-      setShowSuccessAlert(true);
+      setPageAlert({
+        type: "success",
+        message: `${message}되었습니다`,
+      });
     } catch (error: any) {
-      setErrorMessage(error.message || "작업에 실패했습니다");
-      setShowErrorAlert(true);
+      setPageAlert({
+        type: "error",
+        message: `${error.message || "작업에 실패했습니다"}`,
+      });
     }
   };
 
   const getStats = (): StatusMetric[] => {
     if (entityType === "user") {
-      return buildUserStats(data as User[]);
+      return USER_STAT_CONFIG(data as User[]);
     }
     return POST_STAT_CONFIG(data as Post[]);
   };
@@ -343,18 +254,10 @@ export const ManagementPage: React.FC = () => {
   const stats = getStats();
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f0f0f0" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-[1200px] mx-auto p-5">
         <div style={{ marginBottom: "20px" }}>
-          <h1
-            style={{
-              fontSize: "24px",
-              fontWeight: "bold",
-              marginBottom: "5px",
-              color: "#333",
-            }}>
-            관리 시스템
-          </h1>
+          <h1 className="text-2xl font-bold mb-1 text-gray-800">관리 시스템</h1>
           <p style={{ color: "#666", fontSize: "14px" }}>
             사용자와 게시글을 관리하세요
           </p>
@@ -389,40 +292,30 @@ export const ManagementPage: React.FC = () => {
 
           <div>
             <Button
-              className="mb-4 text-right"
               size="lg"
+              className="mb-4 text-right"
               onClick={() => setIsCreateModalOpen(true)}>
               새로 만들기
             </Button>
 
-            {showSuccessAlert && (
-              <div className="mb-3">
-                <Alert onClose={() => setShowSuccessAlert(false)}>
-                  <AlertTitle>성공</AlertTitle>
-                  <AlertDescription>{alertMessage}</AlertDescription>
-                </Alert>
-              </div>
-            )}
-
-            {showErrorAlert && (
+            {pageAlert.type && (
               <div className="mb-3">
                 <Alert
-                  onClose={() => setShowErrorAlert(false)}
-                  variant="destructive">
-                  <AlertTitle>오류</AlertTitle>
-                  <AlertDescription>{errorMessage}</AlertDescription>
+                  variant={
+                    pageAlert.type === "success" ? "success" : "destructive"
+                  }
+                  onClose={() => setPageAlert({ ...pageAlert, type: null })}>
+                  <AlertTitle>
+                    {pageAlert.type === "success" ? "성공" : "오류"}
+                  </AlertTitle>
+                  <AlertDescription>{pageAlert.message}</AlertDescription>
                 </Alert>
               </div>
             )}
 
             <StatusCard items={stats} />
 
-            <div
-              style={{
-                border: "1px solid #ddd",
-                background: "white",
-                overflow: "auto",
-              }}>
+            <div className="bg-white border border-gray-200 p-2.5 overflow-auto">
               <Table
                 columns={renderTableColumns()}
                 data={data}
