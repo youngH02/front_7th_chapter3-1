@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "./components/Header";
+import Header from "./components/layout/Header";
 import { ManagementPage } from "./pages/ManagementPage";
 import "./styles/components.css";
 

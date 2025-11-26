@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "../components/organisms";
-import Modal from "@/components/Modal";
-import { userService } from "../services/userService";
-import { postService } from "../services/postService";
-import type { User } from "../services/userService";
-import type { Post } from "../services/postService";
+import { userService, type User } from "../services/userService";
+import { postService, type Post } from "../services/postService";
 import "../styles/components.css";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import UserForm from "@/components/UserForm";
-import ArticleForm from "@/components/ArticleForm";
+import UserForm from "@/components/features/UserForm";
+import ArticleForm from "@/components/features/ArticleForm";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema, type TUserFormValues } from "@/schemas/userSchema";
@@ -21,6 +18,7 @@ import StatusCard from "@/components/StatusCards";
 import type { StatusCardItem } from "@/constants/stats";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { POST_STAT_CONFIG, USER_STAT_CONFIG } from "@/utils/statUtils";
+import Modal from "@/components/common/Modal";
 
 type EntityType = "user" | "post";
 type Entity = User | Post;
@@ -32,10 +30,6 @@ export const ManagementPage: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Entity | null>(null);
-  // const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  // const [alertMessage, setAlertMessage] = useState("");
-  // const [showErrorAlert, setShowErrorAlert] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState("");
   const [pageAlert, setPageAlert] = useState<{
     type: "success" | "error" | null;
     message: string;
