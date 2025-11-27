@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { SubmitHandler, UseFormReturn } from "react-hook-form";
-import type { TUserFormValues } from "@/schemas/userSchema";
+import type { TUserFormValues } from "@/utils/userSchema";
 
 interface IProps {
   form: UseFormReturn<TUserFormValues>;

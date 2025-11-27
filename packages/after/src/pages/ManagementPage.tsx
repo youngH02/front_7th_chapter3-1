@@ -8,11 +8,8 @@ import UserForm from "@/components/features/UserForm";
 import ArticleForm from "@/components/features/ArticleForm";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { userSchema, type TUserFormValues } from "@/schemas/userSchema";
-import {
-  articleSchema,
-  type TArticleFormValues,
-} from "@/schemas/articleSchema";
+import { userSchema, type TUserFormValues } from "@/utils/userSchema";
+import { articleSchema, type TArticleFormValues } from "@/utils/articleSchema";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Modal from "@/components/common/Modal";
 import type { StatusCardItem } from "@/types/stats";

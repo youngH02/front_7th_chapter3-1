@@ -1,10 +1,23 @@
 import { type FC } from "react";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { SubmitHandler, UseFormReturn } from "react-hook-form";
-import type { TArticleFormValues } from "@/schemas/articleSchema";
+import type { TArticleFormValues } from "@/utils/articleSchema";
 
 interface IProps {
   formArticle: UseFormReturn<TArticleFormValues>;
