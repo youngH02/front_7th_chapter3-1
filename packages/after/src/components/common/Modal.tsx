@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { type FC, type ReactNode } from "react";
+import { type FC, type ReactNode, useEffect } from "react";
 
 interface IProps {
   isOpen: boolean;
@@ -29,6 +29,21 @@ const Modal: FC<IProps> = ({
   onConfirm,
   onClose,
 }) => {
+  // Clean up aria-hidden attributes when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      // Wait for modal animation to complete
+      const timer = setTimeout(() => {
+        document.querySelectorAll('[aria-hidden="true"]').forEach((el) => {
+          el.removeAttribute("aria-hidden");
+          el.removeAttribute("data-aria-hidden");
+        });
+        document.body.style.pointerEvents = "auto";
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[800px]">
