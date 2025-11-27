@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import DataTable from "../../components/common/DataTable";
+import DataTable, { type TColumn } from "../../components/common/DataTable";
 import { Button } from "../../components/ui/button";
 
 const meta = {
@@ -27,7 +27,7 @@ const data: User[] = [
   { id: 3, name: "Bob Johnson", email: "bob@example.com", role: "User" },
 ];
 
-const columns = [
+const columns: TColumn<User>[] = [
   { header: "ID", key: "id" },
   { header: "Name", key: "name" },
   { header: "Email", key: "email" },
@@ -52,7 +52,7 @@ const columns = [
 
 export const Default: Story = {
   args: {
-    columns: columns,
+    columns: columns as any,
     data: data,
   },
 };
