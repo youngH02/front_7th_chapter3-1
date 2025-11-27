@@ -15,21 +15,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    placeholder: "Email",
-    type: "email",
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    placeholder: "Disabled",
-    disabled: true,
-  },
-};
-
-export const WithValue: Story = {
-  args: {
-    value: "Read only value",
-    readOnly: true,
+    placeholder: "Enter text...",
   },
 };

@@ -18,62 +18,57 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const UserActive: Story = {
+/**
+ * Controls 기반 단일 스토리 (status 조절)
+ */
+export const Playground: Story = {
   args: {
     status: "active",
   },
 };
 
-export const UserSuspended: Story = {
-  args: {
-    status: "suspended",
-  },
-};
-
-export const PostPublished: Story = {
-  args: {
-    status: "published",
-  },
-};
-
-export const PostDraft: Story = {
-  args: {
-    status: "draft",
-  },
-};
-
-export const RoleAdmin: Story = {
-  args: {
-    status: "admin",
-  },
-};
-
-export const RoleManager: Story = {
-  args: {
-    status: "manager",
-  },
-};
-
-export const RoleUser: Story = {
-  args: {
-    status: "user",
-  },
-};
-
-export const CategoryDevelopment: Story = {
-  args: {
-    status: "development",
-  },
-};
-
-export const CategoryDesign: Story = {
-  args: {
-    status: "design",
-  },
-};
-
-export const CategoryAccessibility: Story = {
-  args: {
-    status: "accessibility",
+/**
+ * 대표 status 예시를 한 화면에서 볼 수 있는 스토리
+ */
+export const AllStatuses = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap gap-2">
+        <h3 className="w-full text-sm font-semibold text-muted-foreground mb-2">
+          User Status
+        </h3>
+        <StatusBadge status="active" />
+        <StatusBadge status="suspended" />
+        <StatusBadge status="inactive" />
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <h3 className="w-full text-sm font-semibold text-muted-foreground mb-2">
+          Post Status
+        </h3>
+        <StatusBadge status="published" />
+        <StatusBadge status="draft" />
+        <StatusBadge status="archived" />
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <h3 className="w-full text-sm font-semibold text-muted-foreground mb-2">
+          Role
+        </h3>
+        <StatusBadge status="admin" />
+        <StatusBadge status="manager" />
+        <StatusBadge status="moderator" />
+        <StatusBadge status="user" />
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <h3 className="w-full text-sm font-semibold text-muted-foreground mb-2">
+          Category
+        </h3>
+        <StatusBadge status="development" />
+        <StatusBadge status="design" />
+        <StatusBadge status="accessibility" />
+      </div>
+    </div>
+  ),
+  parameters: {
+    controls: { hideNoControlsWarning: true, exclude: ["status"] },
   },
 };

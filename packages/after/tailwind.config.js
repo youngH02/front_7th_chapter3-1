@@ -30,6 +30,14 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -45,27 +53,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        chart: {
-          1: "hsl(var(--chart-1))",
-          2: "hsl(var(--chart-2))",
-          3: "hsl(var(--chart-3))",
-          4: "hsl(var(--chart-4))",
-          5: "hsl(var(--chart-5))",
-        },
-        stat: {
-          user: {
-            active: "hsl(var(--stat-user-active))",
-            inactive: "hsl(var(--stat-user-inactive))",
-            suspended: "hsl(var(--stat-user-suspended))",
-            admin: "hsl(var(--stat-user-admin))",
-          },
-          post: {
-            published: "hsl(var(--stat-post-published))",
-            draft: "hsl(var(--stat-post-draft))",
-            archived: "hsl(var(--stat-post-archived))",
-            views: "hsl(var(--stat-post-views))",
-          },
         },
       },
       borderRadius: {
