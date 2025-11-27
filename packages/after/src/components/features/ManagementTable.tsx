@@ -22,14 +22,11 @@ const ManagementTable: FC<IProps> = ({
   onStatusAction,
 }) => {
   const columns = useMemo<TColumn<any>[]>(() => {
-    const commonColumns: TColumn<any>[] = [
-      { key: "id", header: "ID", width: "60px" },
-    ];
+    const commonColumns: TColumn<any>[] = [{ key: "id", header: "ID" }];
 
     const actionColumn: TColumn<any> = {
       key: "actions",
       header: "관리",
-      width: type === "user" ? "200px" : "250px",
       render: (item) => (
         <ManagementActions
           item={item}
@@ -44,33 +41,39 @@ const ManagementTable: FC<IProps> = ({
     if (type === "user") {
       return [
         ...commonColumns,
-        { key: "username", header: "사용자명", width: "150px" },
+        { key: "username", header: "사용자명" },
         { key: "email", header: "이메일" },
-        { key: "role", header: "역할", width: "120px" },
+        {
+          key: "role",
+          header: "역할",
+          render: (item) => <StatusBadge status={item.role} />,
+        },
         {
           key: "status",
           header: "상태",
-          width: "120px",
-          render: (item) => <StatusBadge status={item.status} type="user" />,
+          render: (item) => <StatusBadge status={item.status} />,
         },
-        { key: "createdAt", header: "생성일", width: "120px" },
-        { key: "lastLogin", header: "마지막 로그인", width: "140px" },
+        { key: "createdAt", header: "생성일" },
+        { key: "lastLogin", header: "마지막 로그인" },
         actionColumn,
       ];
     } else {
       return [
         ...commonColumns,
         { key: "title", header: "제목" },
-        { key: "author", header: "작성자", width: "120px" },
-        { key: "category", header: "카테고리", width: "140px" },
+        { key: "author", header: "작성자" },
+        {
+          key: "category",
+          header: "카테고리",
+          render: (item) => <StatusBadge status={item.category} />,
+        },
         {
           key: "status",
           header: "상태",
-          width: "120px",
-          render: (item) => <StatusBadge status={item.status} type="post" />,
+          render: (item) => <StatusBadge status={item.status} />,
         },
-        { key: "views", header: "조회수", width: "100px" },
-        { key: "createdAt", header: "작성일", width: "120px" },
+        { key: "views", header: "조회수" },
+        { key: "createdAt", header: "작성일" },
         actionColumn,
       ];
     }

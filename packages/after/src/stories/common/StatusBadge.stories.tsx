@@ -12,10 +12,6 @@ const meta = {
     status: {
       control: "text",
     },
-    type: {
-      control: "radio",
-      options: ["user", "post"],
-    },
   },
 } satisfies Meta<typeof StatusBadge>;
 
@@ -24,28 +20,60 @@ type Story = StoryObj<typeof meta>;
 
 export const UserActive: Story = {
   args: {
-    type: "user",
     status: "active",
   },
 };
 
 export const UserSuspended: Story = {
   args: {
-    type: "user",
     status: "suspended",
   },
 };
 
 export const PostPublished: Story = {
   args: {
-    type: "post",
     status: "published",
   },
 };
 
 export const PostDraft: Story = {
   args: {
-    type: "post",
     status: "draft",
+  },
+};
+
+export const RoleAdmin: Story = {
+  args: {
+    status: "admin",
+  },
+};
+
+export const RoleManager: Story = {
+  args: {
+    status: "manager",
+  },
+};
+
+export const RoleUser: Story = {
+  args: {
+    status: "user",
+  },
+};
+
+export const CategoryDevelopment: Story = {
+  args: {
+    status: "development",
+  },
+};
+
+export const CategoryDesign: Story = {
+  args: {
+    status: "design",
+  },
+};
+
+export const CategoryAccessibility: Story = {
+  args: {
+    status: "accessibility",
   },
 };

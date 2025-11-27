@@ -20,9 +20,7 @@ const StatusCard: FC<IProps> = ({ items }) => {
   if (!items.length) return null;
 
   return (
-    <div
-      className="grid gap-3 md:gap-4"
-      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))" }}>
+    <div className="grid gap-3 md:gap-4 grid-cols-[repeat(auto-fit,minmax(130px,1fr))]">
       {items.map(({ key, label, value, accentColorVar }) => (
         <Card
           key={key}

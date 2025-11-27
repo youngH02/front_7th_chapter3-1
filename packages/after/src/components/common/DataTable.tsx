@@ -11,7 +11,6 @@ import { type ReactNode } from "react";
 export type TColumn<T> = {
   header: string;
   key: string;
-  width?: string;
   render?: (item: T) => ReactNode;
 };
 
@@ -27,9 +26,7 @@ const DataTable = <T,>({ columns, data }: IProps<T>) => {
         <TableHeader>
           <TableRow>
             {columns.map((col) => (
-              <TableHead key={col.key} className={col.width}>
-                {col.header}
-              </TableHead>
+              <TableHead key={col.key}>{col.header}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
