@@ -20,7 +20,7 @@ export const ManagementActions = ({
 }: ManagementActionsProps) => {
   return (
     <div className="flex gap-2">
-      <Button variant="outline" size="sm" onClick={() => onEdit(item)}>
+      <Button size="sm" onClick={() => onEdit(item)}>
         수정
       </Button>
       <Button variant="destructive" size="sm" onClick={() => onDelete(item.id)}>
@@ -31,6 +31,7 @@ export const ManagementActions = ({
         <>
           {item.status === "draft" && (
             <Button
+              variant="success"
               size="sm"
               onClick={() => onStatusAction(item.id, "publish")}>
               게시
@@ -38,7 +39,7 @@ export const ManagementActions = ({
           )}
           {item.status === "published" && (
             <Button
-              variant="secondary"
+              variant="outline"
               size="sm"
               onClick={() => onStatusAction(item.id, "archive")}>
               보관
@@ -46,7 +47,7 @@ export const ManagementActions = ({
           )}
           {item.status === "archived" && (
             <Button
-              variant="outline"
+              variant="secondary"
               size="sm"
               onClick={() => onStatusAction(item.id, "restore")}>
               복원

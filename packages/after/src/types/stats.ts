@@ -2,7 +2,6 @@ export interface StatusCardItem {
   key: string;
   label: string;
   value: number;
-  accentColorVar?: string;
 }
 
 export type PostStatKey =

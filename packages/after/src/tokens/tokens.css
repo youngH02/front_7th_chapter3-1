@@ -13,6 +13,10 @@
   --secondary-foreground: 0 0% 9%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
+  --success: 142 43% 35%; /* toned-down green for active/published */
+  --success-foreground: 0 0% 98%;
+  --warning: 32 98% 56%; /* orange for inactive/draft */
+  --warning-foreground: 0 0% 98%;
   --muted: 0 0% 96.1%;
   --muted-foreground: 0 0% 45.1%;
   --accent: 0 0% 96.1%;
@@ -24,18 +28,6 @@
 
   /* ===== Border Radius ===== */
   --radius: 0.5rem;
-
-  /* ===== Status Colors (User) ===== */
-  --stat-user-active: 142 43% 35%;
-  --stat-user-inactive: 32 85% 52%;
-  --stat-user-suspended: 0 60% 52%;
-  --stat-user-admin: 210 90% 40%;
-
-  /* ===== Status Colors (Post) ===== */
-  --stat-post-published: 142 43% 35%;
-  --stat-post-draft: 32 85% 52%;
-  --stat-post-archived: 210 5% 30%;
-  --stat-post-views: 210 90% 40%;
 }
 
 .dark {
@@ -53,6 +45,10 @@
   --secondary-foreground: 0 0% 98%;
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
+  --success: 142 43% 45%;
+  --success-foreground: 0 0% 98%;
+  --warning: 32 98% 56%;
+  --warning-foreground: 0 0% 98%;
   --muted: 0 0% 14.9%;
   --muted-foreground: 0 0% 63.9%;
   --accent: 0 0% 14.9%;
@@ -64,16 +60,4 @@
 
   /* ===== Border Radius ===== */
   --radius: 0.5rem;
-
-  /* ===== Status Colors (User) ===== */
-  --stat-user-active: 142 43% 55%;
-  --stat-user-inactive: 32 85% 60%;
-  --stat-user-suspended: 0 60% 65%;
-  --stat-user-admin: 210 90% 70%;
-
-  /* ===== Status Colors (Post) ===== */
-  --stat-post-published: 142 43% 55%;
-  --stat-post-draft: 32 85% 60%;
-  --stat-post-archived: 0 0% 70%;
-  --stat-post-views: 210 90% 70%;
 }

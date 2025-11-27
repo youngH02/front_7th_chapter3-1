@@ -40,7 +40,7 @@ const Modal: FC<IProps> = ({
 
         <DialogFooter>
           <Button
-            variant="secondary"
+            variant="destructive"
             size="md"
             onClick={onClose}
             disabled={isLoading}>

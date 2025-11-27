@@ -1,8 +1,23 @@
-import { POST_STAT_META, USER_STAT_META } from "@/constants/stats";
 import type { Post } from "@/services/postService";
 import type { PostStatKey, StatusCardItem, UserStatKey } from "@/types/stats";
 
 import type { User } from "@/services/userService";
+
+const POST_LABELS: Record<PostStatKey, string> = {
+  total: "전체",
+  published: "게시됨",
+  draft: "임시저장",
+  archived: "보관됨",
+  views: "총 조회수",
+};
+
+const USER_LABELS: Record<UserStatKey, string> = {
+  total: "전체",
+  active: "활성",
+  inactive: "비활성",
+  suspended: "정지",
+  admin: "관리자",
+};
 
 type PostSummary = {
   total: number;
@@ -56,26 +71,16 @@ const getUserSummary = (users: User[]): UserSummary =>
     }
   );
 
-const getValueByKey = (key: PostStatKey, summary: PostSummary) => {
-  switch (key) {
-    case "total":
-      return summary.total;
-    case "views":
-      return summary.views;
-    default:
-      return summary.status[key];
-  }
+const getValueByKey = (key: PostStatKey, summary: PostSummary): number => {
+  if (key === "total") return summary.total;
+  if (key === "views") return summary.views;
+  return summary.status[key];
 };
 
-const getUserValueByKey = (key: UserStatKey, summary: UserSummary) => {
-  switch (key) {
-    case "total":
-      return summary.total;
-    case "admin":
-      return summary.admin;
-    default:
-      return summary.status[key];
-  }
+const getUserValueByKey = (key: UserStatKey, summary: UserSummary): number => {
+  if (key === "total") return summary.total;
+  if (key === "admin") return summary.admin;
+  return summary.status[key];
 };
 
 export const POST_STAT_CONFIG = (posts: Post[]): StatusCardItem[] => {
@@ -91,9 +96,8 @@ export const POST_STAT_CONFIG = (posts: Post[]): StatusCardItem[] => {
 
   return order.map((key) => ({
     key,
-    label: POST_STAT_META[key].label,
+    label: POST_LABELS[key],
     value: getValueByKey(key, summary),
-    accentColorVar: POST_STAT_META[key].accent,
   }));
 };
 
@@ -110,8 +114,7 @@ export const USER_STAT_CONFIG = (users: User[]): StatusCardItem[] => {
 
   return order.map((key) => ({
     key,
-    label: USER_STAT_META[key].label,
+    label: USER_LABELS[key],
     value: getUserValueByKey(key, summary),
-    accentColorVar: USER_STAT_META[key].accent,
   }));
 };
