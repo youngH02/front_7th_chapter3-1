@@ -10,7 +10,7 @@ export const ManagementTabs = ({
   setEntityType,
 }: ManagementTabsProps) => {
   return (
-    <div className="mb-4 border-b-2 border-gray-300 pb-1">
+    <div className="mb-4 border-b-2 border-border pb-1">
       <Button
         variant={entityType === "post" ? "default" : "outline"}
         size="md"

@@ -168,9 +168,9 @@ export const ManagementPage: React.FC = () => {
 
   const onSubmit = () => {
     if (entityType === "user") {
-      return form.handleSubmit(handleCreate);
+      form.handleSubmit(handleCreate)();
     } else {
-      return formArticle.handleSubmit(handleCreate);
+      formArticle.handleSubmit(handleCreate)();
     }
   };
 
@@ -192,11 +192,11 @@ export const ManagementPage: React.FC = () => {
   const stats = getStats();
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-muted/40">
       <div className="mx-auto p-5" style={{ maxWidth: "1200px" }}>
         <ManagementHeader />
 
-        <div className="bg-white border border-gray-200 p-2.5">
+        <div className="bg-card border border-border p-2.5">
           <ManagementTabs
             entityType={entityType}
             setEntityType={setEntityType}
@@ -230,7 +230,7 @@ export const ManagementPage: React.FC = () => {
 
             <StatusCard items={stats} />
 
-            <div className="bg-white border border-gray-200 p-2.5 overflow-auto">
+            <div className="bg-card border border-border p-2.5 overflow-auto">
               <ManagementTable
                 type={entityType}
                 data={entityType === "user" ? users : posts}
