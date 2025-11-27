@@ -8,13 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectOption } from "@/components/ui/select";
 import type { SubmitHandler, UseFormReturn } from "react-hook-form";
 import type { TUserFormValues } from "@/utils/userSchema";
 
@@ -63,15 +57,13 @@ const UserForm: FC<IProps> = ({ form, handleClick }) => {
               <FormItem>
                 <FormLabel>역할</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="역할 선택" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="user">사용자</SelectItem>
-                      <SelectItem value="moderator">운영자</SelectItem>
-                      <SelectItem value="admin">관리자</SelectItem>
-                    </SelectContent>
+                  <Select {...field}>
+                    <SelectOption value="" disabled>
+                      역할 선택
+                    </SelectOption>
+                    <SelectOption value="user">사용자</SelectOption>
+                    <SelectOption value="moderator">운영자</SelectOption>
+                    <SelectOption value="admin">관리자</SelectOption>
                   </Select>
                 </FormControl>
                 <FormMessage />
@@ -86,15 +78,13 @@ const UserForm: FC<IProps> = ({ form, handleClick }) => {
               <FormItem>
                 <FormLabel>상태</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="역할 선택" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">활성</SelectItem>
-                      <SelectItem value="inactive">비활성</SelectItem>
-                      <SelectItem value="suspended">정지</SelectItem>
-                    </SelectContent>
+                  <Select {...field}>
+                    <SelectOption value="" disabled>
+                      상태 선택
+                    </SelectOption>
+                    <SelectOption value="active">활성</SelectOption>
+                    <SelectOption value="inactive">비활성</SelectOption>
+                    <SelectOption value="suspended">정지</SelectOption>
                   </Select>
                 </FormControl>
                 <FormMessage />

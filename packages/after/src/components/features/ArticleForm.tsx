@@ -8,13 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectOption } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { SubmitHandler, UseFormReturn } from "react-hook-form";
 import type { TArticleFormValues } from "@/utils/articleSchema";
@@ -63,17 +57,15 @@ const ArticleForm: FC<IProps> = ({ formArticle, handleClick }) => {
               <FormItem>
                 <FormLabel>카테고리</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="역할 선택" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="development">Development</SelectItem>
-                      <SelectItem value="design">Design</SelectItem>
-                      <SelectItem value="accessibility">
-                        Accessibility
-                      </SelectItem>
-                    </SelectContent>
+                  <Select {...field}>
+                    <SelectOption value="" disabled>
+                      카테고리 선택
+                    </SelectOption>
+                    <SelectOption value="development">Development</SelectOption>
+                    <SelectOption value="design">Design</SelectOption>
+                    <SelectOption value="accessibility">
+                      Accessibility
+                    </SelectOption>
                   </Select>
                 </FormControl>
                 <FormMessage />
