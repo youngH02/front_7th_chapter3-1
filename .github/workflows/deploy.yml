@@ -35,11 +35,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm --filter @front_lite_chapter3-1/after run build
+      - name: Build App
+        run: pnpm --filter @front_lite_chapter3-1/after exec vite build
+
+      - name: Build Storybook
+        run: pnpm --filter @front_lite_chapter3-1/after run build-storybook
 
       - name: Create SPA fallback
         run: cp packages/after/dist/index.html packages/after/dist/404.html
+
+      - name: Move Storybook to dist
+        run: mv packages/after/storybook-static packages/after/dist/storybook
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
